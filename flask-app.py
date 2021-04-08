@@ -55,7 +55,8 @@ def handle_dialog(req, res, name):
         'я куплю'
     ]:
         res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
-        handle_dialog(req, res, 'кролика')
+        if name == 'слона':
+            handle_dialog(req, res, 'кролика')
         res['response']['end_session'] = True
         return
 
