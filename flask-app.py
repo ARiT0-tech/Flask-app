@@ -24,6 +24,9 @@ def main(name='слона'):
     }
 
     handle_dialog(request.json, response, name)
+    if name == 'слона':
+        handle_dialog(request.json, response, 'кролика')
+        response['response']['end_session'] = True
 
     logging.info(f'Response:  {response!r}')
 
@@ -65,9 +68,6 @@ def handle_dialog(req, res, name):
         'я куплю'
     ]:
         res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
-        if name == 'слона':
-            handle_dialog(req, res, 'кролика')
-            res['response']['end_session'] = True
         return
 
     res['response']['text'] = \
