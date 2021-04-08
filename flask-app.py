@@ -24,9 +24,6 @@ def main(name='слона'):
     }
 
     handle_dialog(request.json, response, name)
-    if name == 'слона':
-        handle_dialog(request.json, response, 'кролика')
-        response['response']['end_session'] = True
 
     logging.info(f'Response:  {response!r}')
 
@@ -35,20 +32,7 @@ def main(name='слона'):
 
 def handle_dialog(req, res, name):
     user_id = req['session']['user_id']
-    if name == 'слона':
-        if req['session']['new']:
-            sessionStorage[user_id] = {
-                'suggests': [
-                    "Не хочу.",
-                    "Не буду.",
-                    "Отстань!",
-                ]
-            }
-
-            res['response']['text'] = f'Привет! Купи {name}!'
-            res['response']['buttons'] = get_suggests(user_id)
-            return
-    else:
+    if req['session']['new']:
         sessionStorage[user_id] = {
             'suggests': [
                 "Не хочу.",
@@ -56,9 +40,22 @@ def handle_dialog(req, res, name):
                 "Отстань!",
             ]
         }
-
-        res['response']['text'] = f'А теперь купи {name}!'
+        res['response']['text'] = f'Привет! Купи {name}!'
         res['response']['buttons'] = get_suggests(user_id)
+        return
+
+    elif not req['session']['new']:
+        sessionStorage[user_id] = {
+            'suggests': [
+                "Не хочу.",
+                "Не буду.",
+                "Отстань!",
+            ]
+        }
+        res['response']['text'] = f'А теперь Купи {name}!'
+        res['response']['buttons'] = get_suggests(user_id)
+        return
+
     if req['request']['original_utterance'].lower() in [
         'ладно',
         'куплю',
@@ -68,6 +65,10 @@ def handle_dialog(req, res, name):
         'я куплю'
     ]:
         res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
+        if name == 'слона':
+            name = 'кролика'
+            handle_dialog(req, res, name)
+            res['response']['end_session'] = True
         return
 
     res['response']['text'] = \
