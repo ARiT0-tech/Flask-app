@@ -23,14 +23,15 @@ def main():
         }
     }
 
-    handle_dialog(request.json, response)
+    handle_dialog(request.json, response, 'слона')
+    handle_dialog(request.json, response, 'кролика')
 
     logging.info(f'Response:  {response!r}')
 
     return json.dumps(response)
 
 
-def handle_dialog(req, res):
+def handle_dialog(req, res, name):
     user_id = req['session']['user_id']
 
     if req['session']['new']:
@@ -42,7 +43,7 @@ def handle_dialog(req, res):
             ]
         }
 
-        res['response']['text'] = 'Привет! Купи слона!'
+        res['response']['text'] = f'Привет! Купи {name}!'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
@@ -54,12 +55,12 @@ def handle_dialog(req, res):
         'я покупаю',
         'я куплю'
     ]:
-        res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
+        res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
         res['response']['end_session'] = True
         return
 
     res['response']['text'] = \
-        f"Все говорят '{req['request']['original_utterance']}', а ты купи слона!"
+        f"Все говорят '{req['request']['original_utterance']}', а ты купи {name}!"
     res['response']['buttons'] = get_suggests(user_id)
 
 
