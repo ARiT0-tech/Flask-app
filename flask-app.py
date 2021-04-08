@@ -39,7 +39,7 @@ def handle_dialog(req, res):
                 "Не буду.",
                 "Отстань!",
             ],
-            'name': ['слона']
+            'name': 'слона'
         }
         res['response']['text'] = f'Привет! Купи слона!'
         return
