@@ -55,7 +55,7 @@ def handle_dialog(req, res):
     ]:
         if sessionStorage[user_id][n] == 'слона':
             sessionStorage[user_id][n] = 'кролика'
-            res['response']['text'] = f'А теперь купи {sessionStorage[user_id][n]}!'
+            res['response']['text'] = 'А теперь купи кролика!'
         else:
             res['response']['text'] = f'Купить слона и кролика можно на Яндекс.Маркете!'
             res['response']['end_session'] = True
