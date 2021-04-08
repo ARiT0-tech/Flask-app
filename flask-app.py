@@ -41,7 +41,7 @@ def handle_dialog(req, res):
             ],
             'name': 'слона'
         }
-        res['response']['text'] = f'Привет! Купи {sessionStorage[user_id][n]}!'
+        res['response']['text'] = f'Привет! Купи слона!'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
