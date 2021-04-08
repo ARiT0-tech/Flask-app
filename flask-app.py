@@ -42,6 +42,7 @@ def handle_dialog(req, res):
             'name': 'слона'
         }
         res['response']['text'] = f'Привет! Купи {sessionStorage[user_id][n]}!'
+        res['response']['buttons'] = get_suggests(user_id)
         return
 
     if req['request']['original_utterance'].lower() in [
@@ -56,6 +57,7 @@ def handle_dialog(req, res):
             sessionStorage[user_id]['suggests'] = ["Не хочу.", "Не буду.", "Отстань!", ]
             sessionStorage[user_id][n] = 'кролика'
             res['response']['text'] = f'А теперь купи {sessionStorage[user_id][n]}!'
+            res['response']['buttons'] = get_suggests(user_id)
         else:
             res['response']['text'] = f'Купить слона и кролика можно на Яндекс.Маркете!'
             res['response']['end_session'] = True
