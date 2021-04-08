@@ -71,10 +71,10 @@ def get_suggests(user_id):
 
     suggests = [
         {'title': suggest, 'hide': True}
-        for suggest in session['suggests'][:2]
+        for suggest in session[:2]
     ]
 
-    session['suggests'] = session['suggests'][1:]
+    session = session[1:]
     sessionStorage[user_id]['suggests'] = session
 
     return suggests
