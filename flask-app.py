@@ -12,7 +12,7 @@ sessionStorage = {}
 
 
 @app.route('/post', methods=['POST'])
-def main(name='слона'):
+def main():
     logging.info(f'Request: {request.json!r}')
 
     response = {
@@ -22,9 +22,7 @@ def main(name='слона'):
             'end_session': False
         }
     }
-    handle_dialog(request.json, response, name)
-    if response['response']['text'] == 'Купить слона можно на Яндекс.Маркете!':
-        request.json['session']['new'] = True
+    handle_dialog(request.json, response, 'слона')
 
     logging.info(f'Response:  {response!r}')
 
@@ -41,10 +39,7 @@ def handle_dialog(req, res, name):
                 "Отстань!",
             ]
         }
-        if name == 'слона':
-            res['response']['text'] = f'Привет! Купи {name}!'
-        else:
-            res['response']['text'] = f'А теперь купи {name}!'
+        res['response']['text'] = f'Привет! Купи {name}!'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
@@ -56,8 +51,14 @@ def handle_dialog(req, res, name):
         'я покупаю',
         'я куплю'
     ]:
-        res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
-        return
+        if name == 'слона':
+            name = 'кролика'
+            res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
+            res['response']['text'] = f'А теперь купи {name}!'
+        else:
+            res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
+            res['response']['end_session'] = True
+            return
 
     res['response']['text'] = \
         f"Все говорят '{req['request']['original_utterance']}', а ты купи {name}!"
