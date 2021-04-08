@@ -9,12 +9,10 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 sessionStorage = {}
-name = 'слона'
 
 
 @app.route('/post', methods=['POST'])
 def main():
-    global name
     logging.info(f'Request: {request.json!r}')
 
     response = {
@@ -25,16 +23,14 @@ def main():
         }
     }
 
-    handle_dialog(request.json, response)
+    handle_dialog(request.json, response, 'слона')
 
     logging.info(f'Response:  {response!r}')
-    if name == 'слона':
-        name = 'кролика'
-        main()
+
     return json.dumps(response)
 
 
-def handle_dialog(req, res):
+def handle_dialog(req, res, name):
     user_id = req['session']['user_id']
 
     if req['session']['new']:
@@ -60,6 +56,7 @@ def handle_dialog(req, res):
     ]:
         res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
         res['response']['end_session'] = True
+        handle_dialog(req, res, 'кролика')
         return
 
     res['response']['text'] = \
