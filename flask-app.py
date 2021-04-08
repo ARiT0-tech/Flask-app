@@ -22,24 +22,26 @@ def main():
             'end_session': False
         }
     }
-    handle_dialog(request.json, response, 'слона')
+    handle_dialog(request.json, response)
 
     logging.info(f'Response:  {response!r}')
 
     return json.dumps(response)
 
 
-def handle_dialog(req, res, name):
+def handle_dialog(req, res):
     user_id = req['session']['user_id']
+    n = 'name'
     if req['session']['new']:
         sessionStorage[user_id] = {
             'suggests': [
                 "Не хочу.",
                 "Не буду.",
                 "Отстань!",
-            ]
+            ],
+            'name': 'слона'
         }
-        res['response']['text'] = f'Привет! Купи {name}!'
+        res['response']['text'] = f'Привет! Купи {sessionStorage[user_id][n]}!'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
@@ -51,16 +53,21 @@ def handle_dialog(req, res, name):
         'я покупаю',
         'я куплю'
     ]:
-        res['response']['text'] = f'А теперь купи {name}!'
+        if sessionStorage[user_id][n] == 'слона':
+            sessionStorage[user_id][n] = 'кролика'
+            res['response']['text'] = f'А теперь купи {sessionStorage[user_id][n]}!'
+        else:
+            res['response']['text'] = f'Купить слона и кролика можно на Яндекс.Маркете!'
+            res['response']['end_session'] = True
         return
 
     res['response']['text'] = \
-        f"Все говорят '{req['request']['original_utterance']}', а ты купи {name}!"
+        f"Все говорят '{req['request']['original_utterance']}', а ты купи {sessionStorage[user_id][n]}!"
     res['response']['buttons'] = get_suggests(user_id)
 
 
 def get_suggests(user_id):
-    session = sessionStorage[user_id]
+    session = sessionStorage[user_id]['suggests']
 
     suggests = [
         {'title': suggest, 'hide': True}
@@ -68,14 +75,7 @@ def get_suggests(user_id):
     ]
 
     session['suggests'] = session['suggests'][1:]
-    sessionStorage[user_id] = session
-
-    if len(suggests) < 2:
-        suggests.append({
-            "title": "Ладно",
-            "url": "https://market.yandex.ru/search?text=слон",
-            "hide": True
-        })
+    sessionStorage[user_id]['suggests'] = session
 
     return suggests
 
