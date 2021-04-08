@@ -13,7 +13,6 @@ sessionStorage = {}
 
 @app.route('/post', methods=['POST'])
 def main(name='слона'):
-    global i
     logging.info(f'Request: {request.json!r}')
 
     response = {
