@@ -40,19 +40,10 @@ def handle_dialog(req, res, name):
                 "Отстань!",
             ]
         }
-        res['response']['text'] = f'Привет! Купи {name}!'
-        res['response']['buttons'] = get_suggests(user_id)
-        return
-
-    elif not req['session']['new']:
-        sessionStorage[user_id] = {
-            'suggests': [
-                "Не хочу.",
-                "Не буду.",
-                "Отстань!",
-            ]
-        }
-        res['response']['text'] = f'А теперь Купи {name}!'
+        if name == 'слона':
+            res['response']['text'] = f'Привет! Купи {name}!'
+        else:
+            res['response']['text'] = f'А теперь купи {name}!'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
