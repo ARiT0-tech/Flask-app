@@ -52,7 +52,7 @@ def handle_dialog(req, res):
         'я покупаю',
         'я куплю'
     ]:
-        if sessionStorage[user_id][n] == 'слона':
+        if sessionStorage[user_id][n][0] == 'слона':
             sessionStorage[user_id]['suggests'] = ["Не хочу.", "Не буду.", "Отстань!", ]
             sessionStorage[user_id][n] = 'кролика'
             res['response']['text'] = 'А теперь купи кролика!'
@@ -62,7 +62,7 @@ def handle_dialog(req, res):
         return
 
     res['response']['text'] = \
-        f"Все говорят '{req['request']['original_utterance']}', а ты купи {sessionStorage[user_id][n]}!"
+        f"Все говорят '{req['request']['original_utterance']}', а ты купи {sessionStorage[user_id][n][0]}!"
     res['response']['buttons'] = get_suggests(user_id)
 
 
