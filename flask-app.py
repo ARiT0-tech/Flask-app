@@ -12,7 +12,7 @@ sessionStorage = {}
 
 
 @app.route('/post', methods=['POST'])
-def main():
+def main(name='слона'):
     logging.info(f'Request: {request.json!r}')
 
     response = {
@@ -23,7 +23,7 @@ def main():
         }
     }
 
-    handle_dialog(request.json, response, 'слона')
+    handle_dialog(request.json, response, name)
 
     logging.info(f'Response:  {response!r}')
 
@@ -56,7 +56,7 @@ def handle_dialog(req, res, name):
     ]:
         res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
         if name == 'слона':
-            handle_dialog(req, res, 'кролика')
+            main('кролика')
             res['response']['end_session'] = True
         return
 
