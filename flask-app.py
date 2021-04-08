@@ -42,6 +42,8 @@ def handle_dialog(req, res, name):
         }
         if name == 'слона':
             res['response']['text'] = f'Привет! Купи {name}!'
+        else:
+            res['response']['text'] = f'А теперь купиЛ {name}!'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
@@ -55,6 +57,7 @@ def handle_dialog(req, res, name):
     ]:
         res['response']['text'] = f'Купить {name} можно на Яндекс.Маркете!'
         if name == 'слона':
+            req['session']['new'] = True
             handle_dialog(req, res, name)
         res['response']['end_session'] = True
         return
