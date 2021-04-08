@@ -53,6 +53,7 @@ def handle_dialog(req, res):
         'я куплю'
     ]:
         if sessionStorage[user_id][n] == 'слона':
+            sessionStorage[user_id]['suggests'] = ["Не хочу.", "Не буду.", "Отстань!", ]
             sessionStorage[user_id][n] = 'кролика'
             res['response']['text'] = 'А теперь купи кролика!'
         else:
