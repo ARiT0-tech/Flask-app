@@ -39,10 +39,9 @@ def handle_dialog(req, res):
                 "Не буду.",
                 "Отстань!",
             ],
-            'name': 'слона'
+            'name': ['слона']
         }
         res['response']['text'] = f'Привет! Купи слона!'
-        res['response']['buttons'] = get_suggests(user_id)
         return
 
     if req['request']['original_utterance'].lower() in [
